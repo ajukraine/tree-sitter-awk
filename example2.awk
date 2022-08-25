@@ -1,5 +1,6 @@
 BEGIN { FS=" *" }
 /^Total Average/ { time=$3; exit }
+  { print "Hello" $1 }
 END {
   print "Total avg time: " time "ms"
   if (time > 100) {

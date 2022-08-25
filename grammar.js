@@ -1,6 +1,7 @@
 const
   newline = '\n',
-  separator = choice(newline, ';');
+  separator = choice(newline, ';'),
+  commaSeq = rule => seq(rule, repeat(seq(',', rule)));
 
 module.exports = grammar({
   name: 'awk',
@@ -30,13 +31,17 @@ module.exports = grammar({
       $.block_of_statements,
       $.if_cond,
     ),
+    _empty_statement: $ => ';',
     block_of_statements: $ => seq('{', $.action, '}'),
-    exit_statement: $ => prec.left(seq('exit', optional($._expression))),
+    exit_statement: $ => prec.right(seq('exit', optional($._expression))),
     if_cond: $ => seq('if', '(', $._expression, ')', $.block_of_statements),
     _input_output_statement: $ => choice(
       $.print_statement,
     ),
-    print_statement: $ => prec.left(seq('print', repeat1($._expression))),
+    print_statement: $ => prec.right(seq(
+      'print',
+      commaSeq($._expression),
+    )),
     _expression: $ => choice(
       $.binary_expression,
       $.function_call,
@@ -44,7 +49,9 @@ module.exports = grammar({
       $.numeric_literal,
       $.field,
       $.identifier,
+      $.string_concat,
     ),
+    string_concat: $ => prec.left(5, seq($._expression, $._expression)),
     binary_expression: $ => choice(
       seq($.identifier, '=', $._expression),
       seq($.identifier, '>', $._expression),
