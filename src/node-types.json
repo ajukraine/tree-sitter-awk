@@ -109,6 +109,32 @@
     }
   },
   {
+    "type": "comment",
+    "named": true,
+    "fields": {
+      "content": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "comment_content",
+            "named": false
+          }
+        ]
+      },
+      "start": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "comment_start",
+            "named": false
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "exit_statement",
     "named": true,
     "fields": {},
@@ -218,7 +244,17 @@
   {
     "type": "pattern",
     "named": true,
-    "fields": {}
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "regex",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "pattern_action_statement",
@@ -288,6 +324,21 @@
       "types": [
         {
           "type": "pattern_action_statement",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "regex",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "regex_pattern",
           "named": true
         }
       ]
@@ -377,7 +428,11 @@
     "named": false
   },
   {
-    "type": "^Total Average",
+    "type": "comment_content",
+    "named": false
+  },
+  {
+    "type": "comment_start",
     "named": false
   },
   {
@@ -395,6 +450,10 @@
   {
     "type": "print",
     "named": false
+  },
+  {
+    "type": "regex_pattern",
+    "named": true
   },
   {
     "type": "string_literal",

@@ -1,4 +1,6 @@
-BEGIN { FS=" *" }
+# Some fricking comment
+
+BEGIN { FS=" *" } # Just for lulz
 /^Total Average/ { time=$3; exit }
   { print "Hello" $1 }
 END {

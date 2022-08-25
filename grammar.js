@@ -5,6 +5,7 @@ const
 
 module.exports = grammar({
   name: 'awk',
+  extras: $ => [$.comment, /\s/],
   rules: {
     program: $ => repeat($._program_item),
     _program_item: $ => seq(
@@ -17,7 +18,7 @@ module.exports = grammar({
     pattern: $ => choice(
       'BEGIN',
       'END',
-      seq('/', '^Total Average', '/'),
+      $.regex,
     ),
 
     action: $ => repeat1(choice(
@@ -63,5 +64,30 @@ module.exports = grammar({
     ),
     identifier: $ => /[a-zA-Z]+/,
     field: $ => seq('$', /[0-9]+/),
+
+
+    // shamelessly copied from the tree-sitter-javascript
+    regex: $ => seq(
+      '/', $.regex_pattern, token.immediate('/'),
+      // optional(field('flags', $.regex_flags))
+    ),
+    regex_pattern: $ => token.immediate(prec(-1,
+      repeat1(choice(
+        seq(
+          '[',
+            repeat(choice(
+              seq('\\', /./),   // escaped character
+              /[^\]\n\\]/       // any character besides ']' or '\n'
+            )),
+            ']'
+        ),              // square-bracket-delimited character class
+        seq('\\', /./), // escaped character
+        /[^/\\\[\n]/    // any character besides '[', '\', '/', '\n'
+      ))
+    )),
+    comment: $ => seq(
+      field('start', alias('#', 'comment_start')),
+      field('content', alias(/[^\r\n]*/, 'comment_content'))
+    )
   }
 });

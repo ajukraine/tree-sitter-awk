@@ -1,8 +1,10 @@
-(pattern) @keyword
+(pattern) @string.special
 (string_literal) @string
 (numeric_literal) @number
 (field) @field
 (identifier) @variable
+(regex_pattern) @string.regex
+(comment) @comment
 
 [
   "if"
