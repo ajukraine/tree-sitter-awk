@@ -1,4 +1,4 @@
-(pattern) @keyword
+(pattern) @string.regex
 (string_literal) @string
 (numeric_literal) @number
 (field) @field
